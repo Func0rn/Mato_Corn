@@ -1,0 +1,203 @@
+{
+  "offices": [
+    {
+      "id": "office-default",
+      "name": {
+        "en": "Fullstack Developer",
+        "zh-CN": "Fullstack Developer",
+        "zh-TW": "Fullstack Developer",
+        "ja": "Fullstack Developer",
+        "ko": "Fullstack Developer"
+      },
+      "desks": [
+        {
+          "id": "project-main",
+          "name": {
+            "en": "🚀 Main Project",
+            "zh-CN": "🚀 主项目",
+            "zh-TW": "🚀 主專案",
+            "ja": "🚀 メインプロジェクト",
+            "ko": "🚀 메인 프로젝트"
+          },
+          "tabs": [
+            {
+              "id": "tab-code",
+              "name": {
+                "en": "💻 Code",
+                "zh-CN": "💻 代码",
+                "zh-TW": "💻 程式碼",
+                "ja": "💻 コード",
+                "ko": "💻 코드"
+              }
+            },
+            {
+              "id": "tab-frontend",
+              "name": {
+                "en": "🎨 Frontend Dev",
+                "zh-CN": "🎨 Frontend Dev",
+                "zh-TW": "🎨 Frontend Dev",
+                "ja": "🎨 Frontend Dev",
+                "ko": "🎨 Frontend Dev"
+              }
+            },
+            {
+              "id": "tab-backend",
+              "name": {
+                "en": "⚙️ Backend Dev",
+                "zh-CN": "⚙️ Backend Dev",
+                "zh-TW": "⚙️ Backend Dev",
+                "ja": "⚙️ Backend Dev",
+                "ko": "⚙️ Backend Dev"
+              }
+            },
+            {
+              "id": "tab-test",
+              "name": {
+                "en": "🧪 Tests",
+                "zh-CN": "🧪 Tests",
+                "zh-TW": "🧪 Tests",
+                "ja": "🧪 Tests",
+                "ko": "🧪 Tests"
+              }
+            }
+          ],
+          "active_tab": 0
+        },
+        {
+          "id": "project-side",
+          "name": {
+            "en": "💡 Side Project",
+            "zh-CN": "💡 侧项目",
+            "zh-TW": "💡 側專案",
+            "ja": "💡 サイドプロジェクト",
+            "ko": "💡 사이드 프로젝트"
+          },
+          "tabs": [
+            {
+              "id": "tab-side-code",
+              "name": {
+                "en": "💻 Code",
+                "zh-CN": "💻 代码",
+                "zh-TW": "💻 程式碼",
+                "ja": "💻 コード",
+                "ko": "💻 코드"
+              }
+            },
+            {
+              "id": "tab-side-server",
+              "name": {
+                "en": "🚀 Server",
+                "zh-CN": "🚀 Server",
+                "zh-TW": "🚀 Server",
+                "ja": "🚀 Server",
+                "ko": "🚀 Server"
+              }
+            }
+          ],
+          "active_tab": 0
+        },
+        {
+          "id": "devops",
+          "name": {
+            "en": "🔧 DevOps",
+            "zh-CN": "🔧 DevOps",
+            "zh-TW": "🔧 DevOps",
+            "ja": "🔧 DevOps",
+            "ko": "🔧 DevOps"
+          },
+          "tabs": [
+            {
+              "id": "tab-docker",
+              "name": {
+                "en": "🐳 Docker",
+                "zh-CN": "🐳 Docker",
+                "zh-TW": "🐳 Docker",
+                "ja": "🐳 Docker",
+                "ko": "🐳 Docker"
+              }
+            },
+            {
+              "id": "tab-k8s",
+              "name": {
+                "en": "☸️ Kubernetes",
+                "zh-CN": "☸️ Kubernetes",
+                "zh-TW": "☸️ Kubernetes",
+                "ja": "☸️ Kubernetes",
+                "ko": "☸️ Kubernetes"
+              }
+            },
+            {
+              "id": "tab-ci",
+              "name": {
+                "en": "🔄 CI/CD",
+                "zh-CN": "🔄 CI/CD",
+                "zh-TW": "🔄 CI/CD",
+                "ja": "🔄 CI/CD",
+                "ko": "🔄 CI/CD"
+              }
+            }
+          ],
+          "active_tab": 0
+        },
+        {
+          "id": "learning",
+          "name": {
+            "en": "📚 Learning",
+            "zh-CN": "📚 学习",
+            "zh-TW": "📚 學習",
+            "ja": "📚 学習",
+            "ko": "📚 학습"
+          },
+          "tabs": [
+            {
+              "id": "tab-tutorial",
+              "name": {
+                "en": "📖 Tutorial",
+                "zh-CN": "📖 Tutorial",
+                "zh-TW": "📖 Tutorial",
+                "ja": "📖 Tutorial",
+                "ko": "📖 Tutorial"
+              }
+            },
+            {
+              "id": "tab-experiment",
+              "name": {
+                "en": "🧪 Experiments",
+                "zh-CN": "🧪 Experiments",
+                "zh-TW": "🧪 Experiments",
+                "ja": "🧪 Experiments",
+                "ko": "🧪 Experiments"
+              }
+            }
+          ],
+          "active_tab": 0
+        }
+      ],
+      "active_desk": 0
+    }
+  ],
+  "current_office": 0,
+  "metadata": {
+    "name": {
+      "en": "🚀 Full-Stack Developer",
+      "zh-CN": "🚀 全栈开发者",
+      "zh-TW": "🚀 全端開發者",
+      "ja": "🚀 フルスタック開発",
+      "ko": "🚀 풀스택 개발자"
+    },
+    "description": {
+      "en": "4 desks, 11 tabs",
+      "zh-CN": "前后端与基础设施并行开发布局。",
+      "zh-TW": "前後端與基礎設施並行開發佈局。",
+      "ja": "フロント/バック/インフラを横断する構成。",
+      "ko": "프론트/백엔드/인프라를 함께 다루는 구성."
+    },
+    "details": {
+      "en": "Multiple projects office with Main Project, Side Project, DevOps (Docker, K8s, CI/CD), and Learning sections.",
+      "zh-CN": "用于多项目全栈开发：主项目、侧项目、DevOps、学习研究等 desk。",
+      "zh-TW": "用於多專案全端開發：主專案、側專案、DevOps、學習研究等 desk。",
+      "ja": "複数プロジェクト向け。メイン/サブ、DevOps、学習を横断できる構成。",
+      "ko": "멀티 프로젝트 풀스택용. 메인/사이드/DevOps/학습 desk를 함께 제공."
+    }
+  }
+}

@@ -1,0 +1,333 @@
+use super::app::App;
+use crate::protocol::{ClientMsg, ServerMsg};
+use std::collections::HashSet;
+use std::io::{BufRead, BufReader, Write};
+use std::os::unix::net::UnixStream;
+use std::path::Path;
+use std::sync::mpsc::{self, Receiver};
+use std::thread;
+use std::time::{Duration, Instant};
+
+const ACTIVE_THRESHOLD_SECS: u64 = 2;
+const ALARM_MIN_ACTIVE_SECS: u64 = 8;
+const ALARM_QUIET_GRACE_SECS: u64 = 6;
+
+pub(crate) struct ActivitySnapshot {
+    pub active_tabs: HashSet<String>,
+    pub known_tabs: HashSet<String>,
+}
+
+impl App {
+    pub fn sync_tab_titles(&mut self) {
+        if self.last_title_sync.elapsed() < Duration::from_millis(500) {
+            return;
+        }
+        self.last_title_sync = Instant::now();
+
+        // Sync only the currently visible tab to avoid per-frame N×socket round-trips.
+        let desk_idx = self.selected();
+        let tab_idx = self.offices[self.current_office].desks[desk_idx].active_tab;
+        if let Some(tab) = self.offices[self.current_office].desks[desk_idx]
+            .tabs
+            .get_mut(tab_idx)
+        {
+            let rows = self.term_rows.max(1);
+            let cols = self.term_cols.max(1);
+            let screen = tab.provider.get_screen(rows, cols);
+            if let Some(title) = screen.title {
+                if !title.is_empty() {
+                    self.terminal_titles.insert(tab.id.clone(), title);
+                }
+            }
+        }
+    }
+
+    /// Query daemon for active status of all tabs (call every frame)
+    pub fn refresh_active_status(&mut self) {
+        if self.active_status_rx.is_none() {
+            self.active_status_rx = Some(Self::spawn_active_status_worker(ACTIVE_THRESHOLD_SECS));
+            self.daemon_connected = false;
+        }
+        let mut latest: Option<ActivitySnapshot> = None;
+        if let Some(rx) = &self.active_status_rx {
+            while let Ok(snapshot) = rx.try_recv() as Result<ActivitySnapshot, _> {
+                latest = Some(snapshot);
+            }
+        }
+        if let Some(snapshot) = latest {
+            self.apply_activity_snapshot(snapshot);
+            self.daemon_connected = true;
+            self.daemon_last_ok = Instant::now();
+        } else if self.daemon_connected && self.daemon_last_ok.elapsed() > Duration::from_secs(2) {
+            // No recent successful daemon status reads.
+            self.daemon_connected = false;
+        }
+    }
+
+    fn apply_activity_snapshot(&mut self, snapshot: ActivitySnapshot) {
+        if !self.alarm_enabled {
+            self.active_tabs = snapshot.active_tabs;
+            self.clear_alarm_state();
+            return;
+        }
+
+        let now = Instant::now();
+        let previous_active = self.active_tabs.clone();
+
+        for tab_id in &snapshot.active_tabs {
+            self.alarm_active_since
+                .entry(tab_id.clone())
+                .or_insert(now);
+            self.alarm_candidates.remove(tab_id);
+            self.alarm_tabs.remove(tab_id);
+        }
+
+        for tab_id in previous_active.difference(&snapshot.active_tabs) {
+            if let Some(started_at) = self.alarm_active_since.remove(tab_id) {
+                if now.duration_since(started_at) >= Duration::from_secs(ALARM_MIN_ACTIVE_SECS) {
+                    self.alarm_candidates.insert(tab_id.clone(), now);
+                }
+            }
+        }
+
+        let before_alarm_count = self.alarm_tabs.len();
+        let ready: Vec<String> = self
+            .alarm_candidates
+            .iter()
+            .filter(|(tab_id, quiet_since)| {
+                !snapshot.active_tabs.contains(*tab_id)
+                    && now.duration_since(**quiet_since)
+                        >= Duration::from_secs(ALARM_QUIET_GRACE_SECS)
+            })
+            .map(|(tab_id, _)| tab_id.clone())
+            .collect();
+        for tab_id in ready {
+            self.alarm_candidates.remove(&tab_id);
+            self.alarm_tabs.insert(tab_id);
+        }
+
+        self.active_tabs = snapshot.active_tabs;
+        self.prune_alarm_state(&snapshot.known_tabs);
+        self.acknowledge_active_tab_alarm();
+        if self.alarm_tabs.len() != before_alarm_count {
+            self.dirty = true;
+        }
+    }
+
+    fn prune_alarm_state(&mut self, known_tabs: &HashSet<String>) {
+        self.alarm_tabs.retain(|tab_id| known_tabs.contains(tab_id));
+        self.alarm_active_since
+            .retain(|tab_id, _| known_tabs.contains(tab_id));
+        self.alarm_candidates
+            .retain(|tab_id, _| known_tabs.contains(tab_id));
+    }
+
+    fn spawn_active_status_worker(active_threshold_secs: u64) -> Receiver<ActivitySnapshot> {
+        let (tx, rx) = mpsc::channel();
+        thread::spawn(move || {
+            let socket_path = crate::utils::get_socket_path();
+            loop {
+                let snapshot = (|| -> Option<ActivitySnapshot> {
+                    let mut stream = UnixStream::connect(&socket_path).ok()?;
+                    stream
+                        .set_read_timeout(Some(Duration::from_millis(150)))
+                        .ok()?;
+                    let msg = serde_json::to_vec(&ClientMsg::GetIdleStatus).ok()?;
+                    stream.write_all(&msg).ok()?;
+                    stream.write_all(b"\n").ok()?;
+                    stream.flush().ok()?;
+                    let mut line = String::new();
+                    BufReader::new(&stream).read_line(&mut line).ok()?;
+                    let ServerMsg::IdleStatus { tabs } = serde_json::from_str(&line).ok()? else {
+                        return None;
+                    };
+                    let known_tabs = tabs
+                        .iter()
+                        .map(|(id, _)| id.clone())
+                        .collect::<HashSet<_>>();
+                    let active_tabs = tabs
+                        .into_iter()
+                            .filter(|(_, secs)| *secs < active_threshold_secs)
+                            .map(|(id, _)| id)
+                        .collect();
+                    Some(ActivitySnapshot {
+                        active_tabs,
+                        known_tabs,
+                    })
+                })();
+                let poll_interval = if let Some(snapshot) = snapshot {
+                    let next = if snapshot.active_tabs.is_empty() {
+                        Duration::from_millis(1000)
+                    } else {
+                        Duration::from_millis(300)
+                    };
+                    if tx.send(snapshot).is_err() {
+                        break;
+                    }
+                    next
+                } else {
+                    // Daemon/socket issue: back off briefly to avoid hot-looping.
+                    Duration::from_millis(1000)
+                };
+                thread::sleep(poll_interval);
+            }
+        });
+        rx
+    }
+
+    pub fn refresh_update_status(&mut self) {
+        let socket_path = crate::utils::get_socket_path();
+        self.refresh_update_status_from_socket(socket_path);
+    }
+
+    pub fn refresh_update_status_from_socket<P: AsRef<Path>>(&mut self, socket_path: P) {
+        if self.last_update_check.elapsed() < Duration::from_secs(3600) {
+            return;
+        }
+        self.last_update_check = Instant::now();
+        let Ok(mut stream) = UnixStream::connect(socket_path.as_ref()) else {
+            return;
+        };
+        let msg = serde_json::to_vec(&ClientMsg::GetUpdateStatus).unwrap();
+        let _ = stream.write_all(&msg);
+        let _ = stream.write_all(b"\n");
+        let _ = stream.flush();
+        let mut line = String::new();
+        let _ = BufReader::new(&stream).read_line(&mut line);
+        if let Ok(ServerMsg::UpdateStatus { latest }) = serde_json::from_str(&line) {
+            self.update_available = latest;
+        }
+    }
+
+    /// Update spinner animation frame
+    pub fn update_spinner(&mut self) {
+        if self.last_spinner_update.elapsed() > Duration::from_millis(80) {
+            self.spinner_frame = (self.spinner_frame + 1) % 10;
+            self.last_spinner_update = Instant::now();
+        }
+    }
+
+    /// True when the spinner is due for its next frame — used to drive redraws.
+    pub fn spinner_needs_update(&self) -> bool {
+        self.last_spinner_update.elapsed() > Duration::from_millis(80)
+    }
+
+    pub fn alarm_needs_update(&self) -> bool {
+        self.has_alarm_tabs() && self.spinner_needs_update()
+    }
+
+    pub fn alarm_pulse_on(&self) -> bool {
+        self.spinner_frame < 5
+    }
+
+    /// Get current spinner character
+    pub fn get_spinner(&self) -> &str {
+        const SPINNER: [&str; 10] = ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"];
+        SPINNER[self.spinner_frame]
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::{ActivitySnapshot, App};
+    use crate::client::app::{Desk, Office, TabEntry};
+    use crate::terminal_provider::{ScreenContent, TerminalProvider};
+    use ratatui::widgets::ListState;
+    use std::collections::HashSet;
+    use std::time::{Duration, Instant};
+
+    struct NullProvider;
+
+    impl TerminalProvider for NullProvider {
+        fn spawn(&mut self, _: u16, _: u16) {}
+        fn resize(&mut self, _: u16, _: u16) {}
+        fn write(&mut self, _: &[u8]) {}
+        fn get_screen(&self, _: u16, _: u16) -> ScreenContent {
+            ScreenContent::default()
+        }
+    }
+
+    fn tab(id: &str) -> TabEntry {
+        TabEntry {
+            id: id.into(),
+            name: id.into(),
+            preset_name: None,
+            provider: Box::new(NullProvider),
+        }
+    }
+
+    fn test_app() -> App {
+        let mut app = App::new();
+        app.offices = vec![Office {
+            id: "office".into(),
+            name: "Office".into(),
+            desks: vec![Desk {
+                id: "desk".into(),
+                name: "Desk".into(),
+                cwd: None,
+                tabs: vec![tab("watch"), tab("done")],
+                active_tab: 0,
+            }],
+            active_desk: 0,
+        }];
+        app.current_office = 0;
+        app.list_state = ListState::default();
+        app.list_state.select(Some(0));
+        app
+    }
+
+    fn snapshot(active: &[&str]) -> ActivitySnapshot {
+        let known_tabs = ["watch".to_string(), "done".to_string()]
+            .into_iter()
+            .collect::<HashSet<_>>();
+        let active_tabs = active.iter().map(|id| (*id).to_string()).collect();
+        ActivitySnapshot {
+            active_tabs,
+            known_tabs,
+        }
+    }
+
+    #[test]
+    fn alarm_fires_after_meaningful_activity_goes_quiet() {
+        let mut app = test_app();
+        app.active_tabs.insert("done".into());
+        app.alarm_active_since
+            .insert("done".into(), Instant::now() - Duration::from_secs(10));
+
+        app.apply_activity_snapshot(snapshot(&[]));
+        assert!(app.alarm_candidates.contains_key("done"));
+        assert!(!app.alarm_tabs.contains("done"));
+
+        app.alarm_candidates
+            .insert("done".into(), Instant::now() - Duration::from_secs(7));
+        app.apply_activity_snapshot(snapshot(&[]));
+        assert!(app.alarm_tabs.contains("done"));
+    }
+
+    #[test]
+    fn viewing_active_tab_acknowledges_alarm() {
+        let mut app = test_app();
+        app.alarm_tabs.insert("watch".into());
+
+        app.acknowledge_active_tab_alarm();
+        assert!(!app.alarm_tabs.contains("watch"));
+    }
+
+    #[test]
+    fn alarm_disabled_suppresses_candidates_and_clears_existing_state() {
+        let mut app = test_app();
+        app.alarm_enabled = false;
+        app.active_tabs.insert("done".into());
+        app.alarm_active_since
+            .insert("done".into(), Instant::now() - Duration::from_secs(10));
+        app.alarm_candidates
+            .insert("done".into(), Instant::now() - Duration::from_secs(7));
+        app.alarm_tabs.insert("done".into());
+
+        app.apply_activity_snapshot(snapshot(&[]));
+
+        assert!(app.alarm_active_since.is_empty());
+        assert!(app.alarm_candidates.is_empty());
+        assert!(app.alarm_tabs.is_empty());
+    }
+}

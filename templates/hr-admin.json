@@ -1,0 +1,213 @@
+{
+  "offices": [
+    {
+      "id": "office-hr-admin",
+      "name": {
+        "en": "People & Admin",
+        "zh-CN": "People & Admin",
+        "zh-TW": "People & Admin",
+        "ja": "People & Admin",
+        "ko": "People & Admin"
+      },
+      "desks": [
+        {
+          "id": "hr-recruiting",
+          "name": {
+            "en": "👥 Recruiting",
+            "zh-CN": "👥 招聘",
+            "zh-TW": "👥 招聘",
+            "ja": "👥 採用",
+            "ko": "👥 채용"
+          },
+          "tabs": [
+            {
+              "id": "tab-pipeline",
+              "name": {
+                "en": "🧲 Candidate Pipeline",
+                "zh-CN": "🧲 Candidate Pipeline",
+                "zh-TW": "🧲 Candidate Pipeline",
+                "ja": "🧲 Candidate Pipeline",
+                "ko": "🧲 Candidate Pipeline"
+              }
+            },
+            {
+              "id": "tab-interviews",
+              "name": {
+                "en": "🗓️ Interviews",
+                "zh-CN": "🗓️ Interviews",
+                "zh-TW": "🗓️ Interviews",
+                "ja": "🗓️ Interviews",
+                "ko": "🗓️ Interviews"
+              }
+            },
+            {
+              "id": "tab-offers",
+              "name": {
+                "en": "📨 Offer Tracker",
+                "zh-CN": "📨 Offer Tracker",
+                "zh-TW": "📨 Offer Tracker",
+                "ja": "📨 Offer Tracker",
+                "ko": "📨 Offer Tracker"
+              }
+            }
+          ],
+          "active_tab": 0
+        },
+        {
+          "id": "hr-people-ops",
+          "name": {
+            "en": "🧾 People Ops",
+            "zh-CN": "🧾 人事运营",
+            "zh-TW": "🧾 人事營運",
+            "ja": "🧾 人事運用",
+            "ko": "🧾 피플옵스"
+          },
+          "tabs": [
+            {
+              "id": "tab-onboarding",
+              "name": {
+                "en": "🚪 Onboarding",
+                "zh-CN": "🚪 Onboarding",
+                "zh-TW": "🚪 Onboarding",
+                "ja": "🚪 Onboarding",
+                "ko": "🚪 Onboarding"
+              }
+            },
+            {
+              "id": "tab-policies",
+              "name": {
+                "en": "📚 Policies",
+                "zh-CN": "📚 Policies",
+                "zh-TW": "📚 Policies",
+                "ja": "📚 Policies",
+                "ko": "📚 Policies"
+              }
+            },
+            {
+              "id": "tab-performance",
+              "name": {
+                "en": "📈 Performance",
+                "zh-CN": "📈 Performance",
+                "zh-TW": "📈 Performance",
+                "ja": "📈 Performance",
+                "ko": "📈 Performance"
+              }
+            }
+          ],
+          "active_tab": 0
+        },
+        {
+          "id": "hr-admin-coord",
+          "name": {
+            "en": "🗂️ Admin Coordination",
+            "zh-CN": "🗂️ 行政协同",
+            "zh-TW": "🗂️ 行政協同",
+            "ja": "🗂️ 総務調整",
+            "ko": "🗂️ 총무 조율"
+          },
+          "tabs": [
+            {
+              "id": "tab-calendar",
+              "name": {
+                "en": "🗓️ Calendar",
+                "zh-CN": "🗓️ Calendar",
+                "zh-TW": "🗓️ Calendar",
+                "ja": "🗓️ Calendar",
+                "ko": "🗓️ Calendar"
+              }
+            },
+            {
+              "id": "tab-facilities",
+              "name": {
+                "en": "🏢 Facilities",
+                "zh-CN": "🏢 Facilities",
+                "zh-TW": "🏢 Facilities",
+                "ja": "🏢 Facilities",
+                "ko": "🏢 Facilities"
+              }
+            },
+            {
+              "id": "tab-vendors",
+              "name": {
+                "en": "🤝 Vendors",
+                "zh-CN": "🤝 Vendors",
+                "zh-TW": "🤝 Vendors",
+                "ja": "🤝 Vendors",
+                "ko": "🤝 Vendors"
+              }
+            }
+          ],
+          "active_tab": 0
+        },
+        {
+          "id": "hr-culture",
+          "name": {
+            "en": "🌱 Learning & Culture",
+            "zh-CN": "🌱 学习与文化",
+            "zh-TW": "🌱 學習與文化",
+            "ja": "🌱 学習・文化",
+            "ko": "🌱 학습·문화"
+          },
+          "tabs": [
+            {
+              "id": "tab-training",
+              "name": {
+                "en": "🎓 Training",
+                "zh-CN": "🎓 Training",
+                "zh-TW": "🎓 Training",
+                "ja": "🎓 Training",
+                "ko": "🎓 Training"
+              }
+            },
+            {
+              "id": "tab-engagement",
+              "name": {
+                "en": "💬 Engagement",
+                "zh-CN": "💬 Engagement",
+                "zh-TW": "💬 Engagement",
+                "ja": "💬 Engagement",
+                "ko": "💬 Engagement"
+              }
+            },
+            {
+              "id": "tab-comms",
+              "name": {
+                "en": "📣 Internal Comms",
+                "zh-CN": "📣 Internal Comms",
+                "zh-TW": "📣 Internal Comms",
+                "ja": "📣 Internal Comms",
+                "ko": "📣 Internal Comms"
+              }
+            }
+          ],
+          "active_tab": 0
+        }
+      ],
+      "active_desk": 0
+    }
+  ],
+  "current_office": 0,
+  "metadata": {
+    "name": {
+      "en": "🧾 People & Admin",
+      "zh-CN": "🧾 行政与人力资源",
+      "zh-TW": "🧾 行政與人力資源",
+      "ja": "🧾 人事・総務",
+      "ko": "🧾 인사·총무"
+    },
+    "description": {
+      "en": "4 desks, 12 tabs",
+      "zh-CN": "4 个 desk，12 个 tab",
+      "zh-TW": "4 個 desk，12 個 tab",
+      "ja": "4 desks, 12 tabs",
+      "ko": "4 desks, 12 tabs"
+    },
+    "details": {
+      "en": "Designed for HR/admin teams: recruiting, people operations, office coordination, and learning culture management.",
+      "zh-CN": "面向行政与HR团队：招聘、人事运营、行政协调与组织文化管理。",
+      "zh-TW": "面向行政與HR團隊：招聘、人事營運、行政協調與組織文化管理。",
+      "ja": "人事/総務向け。採用、人事運用、管理業務、学習文化を一元化。",
+      "ko": "HR/총무 전용. 채용, 피플옵스, 행정 조율, 학습·문화 관리를 통합."
+    }
+  }
+}

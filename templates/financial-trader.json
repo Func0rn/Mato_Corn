@@ -1,0 +1,342 @@
+{
+  "offices": [
+    {
+      "id": "office-financial-trader",
+      "name": {
+        "en": "Financial Stock Trading",
+        "zh-CN": "金融股票交易",
+        "zh-TW": "金融股票交易",
+        "ja": "金融株式トレード",
+        "ko": "금융 주식 트레이딩"
+      },
+      "desks": [
+        {
+          "id": "ft-pre-market",
+          "name": {
+            "en": "🌅 Pre-Market",
+            "zh-CN": "🌅 盘前准备",
+            "zh-TW": "🌅 盤前準備",
+            "ja": "🌅 寄前準備",
+            "ko": "🌅 장전 준비"
+          },
+          "tabs": [
+            {
+              "id": "tab-pm-macro",
+              "name": {
+                "en": "🌍 Macro Calendar",
+                "zh-CN": "🌍 宏观日历",
+                "zh-TW": "🌍 宏觀日曆",
+                "ja": "🌍 マクロカレンダー",
+                "ko": "🌍 거시 캘린더"
+              }
+            },
+            {
+              "id": "tab-pm-gappers",
+              "name": {
+                "en": "⚡ Gap & Volume Scan",
+                "zh-CN": "⚡ 高开缺口与量能扫描",
+                "zh-TW": "⚡ 跳空缺口與量能掃描",
+                "ja": "⚡ ギャップ・出来高スキャン",
+                "ko": "⚡ 갭·거래량 스캔"
+              }
+            },
+            {
+              "id": "tab-pm-watchlist",
+              "name": {
+                "en": "🧾 Watchlist Builder",
+                "zh-CN": "🧾 自选股构建",
+                "zh-TW": "🧾 觀察名單建立",
+                "ja": "🧾 ウォッチリスト作成",
+                "ko": "🧾 워치리스트 구성"
+              }
+            }
+          ],
+          "active_tab": 0
+        },
+        {
+          "id": "ft-live-market",
+          "name": {
+            "en": "📈 Live Market",
+            "zh-CN": "📈 盘中监控",
+            "zh-TW": "📈 盤中監控",
+            "ja": "📈 場中監視",
+            "ko": "📈 장중 모니터링"
+          },
+          "tabs": [
+            {
+              "id": "tab-live-tape",
+              "name": {
+                "en": "📡 Tape & Prints",
+                "zh-CN": "📡 分时与逐笔",
+                "zh-TW": "📡 分時與逐筆",
+                "ja": "📡 ティック・約定",
+                "ko": "📡 체결 흐름"
+              }
+            },
+            {
+              "id": "tab-live-level2",
+              "name": {
+                "en": "🧱 Level II",
+                "zh-CN": "🧱 Level II",
+                "zh-TW": "🧱 Level II",
+                "ja": "🧱 板情報（Level II）",
+                "ko": "🧱 호가창 (Level II)"
+              }
+            },
+            {
+              "id": "tab-live-flow",
+              "name": {
+                "en": "🌀 Options Flow",
+                "zh-CN": "🌀 期权资金流",
+                "zh-TW": "🌀 選擇權資金流",
+                "ja": "🌀 オプションフロー",
+                "ko": "🌀 옵션 플로우"
+              }
+            }
+          ],
+          "active_tab": 0
+        },
+        {
+          "id": "ft-research",
+          "name": {
+            "en": "🔬 Equity Research",
+            "zh-CN": "🔬 个股研究",
+            "zh-TW": "🔬 個股研究",
+            "ja": "🔬 銘柄調査",
+            "ko": "🔬 종목 리서치"
+          },
+          "tabs": [
+            {
+              "id": "tab-earnings",
+              "name": {
+                "en": "📑 Earnings Notes",
+                "zh-CN": "📑 财报笔记",
+                "zh-TW": "📑 財報筆記",
+                "ja": "📑 決算ノート",
+                "ko": "📑 실적 노트"
+              }
+            },
+            {
+              "id": "tab-valuation",
+              "name": {
+                "en": "🧮 Valuation Model",
+                "zh-CN": "🧮 估值模型",
+                "zh-TW": "🧮 估值模型",
+                "ja": "🧮 バリュエーション",
+                "ko": "🧮 밸류에이션 모델"
+              }
+            },
+            {
+              "id": "tab-thesis",
+              "name": {
+                "en": "🧠 Thesis Log",
+                "zh-CN": "🧠 投资逻辑库",
+                "zh-TW": "🧠 投資邏輯庫",
+                "ja": "🧠 投資仮説ログ",
+                "ko": "🧠 투자 가설 로그"
+              }
+            }
+          ],
+          "active_tab": 0
+        },
+        {
+          "id": "ft-sector-rotation",
+          "name": {
+            "en": "🧭 Sector Rotation",
+            "zh-CN": "🧭 行业轮动",
+            "zh-TW": "🧭 產業輪動",
+            "ja": "🧭 セクターローテーション",
+            "ko": "🧭 섹터 로테이션"
+          },
+          "tabs": [
+            {
+              "id": "tab-sector-strength",
+              "name": {
+                "en": "📶 Relative Strength",
+                "zh-CN": "📶 相对强弱",
+                "zh-TW": "📶 相對強弱",
+                "ja": "📶 相対強弱",
+                "ko": "📶 상대강도"
+              }
+            },
+            {
+              "id": "tab-sector-heatmap",
+              "name": {
+                "en": "🗺️ Sector Heatmap",
+                "zh-CN": "🗺️ 板块热力图",
+                "zh-TW": "🗺️ 板塊熱力圖",
+                "ja": "🗺️ セクターヒートマップ",
+                "ko": "🗺️ 섹터 히트맵"
+              }
+            },
+            {
+              "id": "tab-rotation-notes",
+              "name": {
+                "en": "📝 Rotation Notes",
+                "zh-CN": "📝 轮动笔记",
+                "zh-TW": "📝 輪動筆記",
+                "ja": "📝 ローテーションノート",
+                "ko": "📝 로테이션 노트"
+              }
+            }
+          ],
+          "active_tab": 0
+        },
+        {
+          "id": "ft-catalyst-news",
+          "name": {
+            "en": "📰 Catalyst & News",
+            "zh-CN": "📰 催化与新闻",
+            "zh-TW": "📰 催化與新聞",
+            "ja": "📰 材料・ニュース",
+            "ko": "📰 모멘텀·뉴스"
+          },
+          "tabs": [
+            {
+              "id": "tab-live-headlines",
+              "name": {
+                "en": "🗞️ Live Headlines",
+                "zh-CN": "🗞️ 实时要闻",
+                "zh-TW": "🗞️ 即時要聞",
+                "ja": "🗞️ リアルタイム見出し",
+                "ko": "🗞️ 실시간 헤드라인"
+              }
+            },
+            {
+              "id": "tab-catalyst-calendar",
+              "name": {
+                "en": "📆 Catalyst Calendar",
+                "zh-CN": "📆 催化事件日历",
+                "zh-TW": "📆 催化事件日曆",
+                "ja": "📆 イベントカレンダー",
+                "ko": "📆 이벤트 캘린더"
+              }
+            },
+            {
+              "id": "tab-rumor-tracker",
+              "name": {
+                "en": "👀 Rumor Tracker",
+                "zh-CN": "👀 市场传闻跟踪",
+                "zh-TW": "👀 市場傳聞追蹤",
+                "ja": "👀 噂トラッカー",
+                "ko": "👀 루머 트래커"
+              }
+            }
+          ],
+          "active_tab": 0
+        },
+        {
+          "id": "ft-risk",
+          "name": {
+            "en": "🛡️ Risk Book",
+            "zh-CN": "🛡️ 风控台",
+            "zh-TW": "🛡️ 風控台",
+            "ja": "🛡️ リスク管理",
+            "ko": "🛡️ 리스크 북"
+          },
+          "tabs": [
+            {
+              "id": "tab-risk-pos",
+              "name": {
+                "en": "📏 Position Limits",
+                "zh-CN": "📏 仓位上限",
+                "zh-TW": "📏 倉位上限",
+                "ja": "📏 ポジション制限",
+                "ko": "📏 포지션 한도"
+              }
+            },
+            {
+              "id": "tab-risk-exposure",
+              "name": {
+                "en": "📉 Exposure Monitor",
+                "zh-CN": "📉 风险敞口监控",
+                "zh-TW": "📉 風險曝險監控",
+                "ja": "📉 エクスポージャ監視",
+                "ko": "📉 익스포저 모니터"
+              }
+            },
+            {
+              "id": "tab-risk-alerts",
+              "name": {
+                "en": "🚨 Alerts",
+                "zh-CN": "🚨 风险告警",
+                "zh-TW": "🚨 風險告警",
+                "ja": "🚨 アラート",
+                "ko": "🚨 알림"
+              }
+            }
+          ],
+          "active_tab": 0
+        },
+        {
+          "id": "ft-post-market",
+          "name": {
+            "en": "🌙 Post-Market",
+            "zh-CN": "🌙 盘后复盘",
+            "zh-TW": "🌙 盤後復盤",
+            "ja": "🌙 引け後レビュー",
+            "ko": "🌙 장마감 리뷰"
+          },
+          "tabs": [
+            {
+              "id": "tab-journal",
+              "name": {
+                "en": "📓 Trade Journal",
+                "zh-CN": "📓 交易日记",
+                "zh-TW": "📓 交易日誌",
+                "ja": "📓 トレード日誌",
+                "ko": "📓 트레이드 저널"
+              }
+            },
+            {
+              "id": "tab-recap",
+              "name": {
+                "en": "🪞 Day Recap",
+                "zh-CN": "🪞 当日复盘",
+                "zh-TW": "🪞 當日復盤",
+                "ja": "🪞 デイリー総括",
+                "ko": "🪞 데일리 리캡"
+              }
+            },
+            {
+              "id": "tab-nextday",
+              "name": {
+                "en": "🗓️ Next-Day Plan",
+                "zh-CN": "🗓️ 次日计划",
+                "zh-TW": "🗓️ 次日計畫",
+                "ja": "🗓️ 翌日プラン",
+                "ko": "🗓️ 다음날 계획"
+              }
+            }
+          ],
+          "active_tab": 0
+        }
+      ],
+      "active_desk": 0
+    }
+  ],
+  "current_office": 0,
+  "metadata": {
+    "name": {
+      "en": "💹 Financial Stock Trading",
+      "zh-CN": "💹 金融股票交易",
+      "zh-TW": "💹 金融股票交易",
+      "ja": "💹 金融株式トレード",
+      "ko": "💹 금융 주식 트레이딩"
+    },
+    "description": {
+      "en": "8 desks, 24 tabs",
+      "zh-CN": "8 个 desk，24 个 tab",
+      "zh-TW": "8 個 desk，24 個 tab",
+      "ja": "8 desks, 24 tabs",
+      "ko": "8 desks, 24 tabs"
+    },
+    "details": {
+      "en": "For secondary-market stock analysts/traders: pre-market prep, live market monitoring, equity research, sector rotation, catalyst tracking, risk controls, and post-market review.",
+      "zh-CN": "面向二级市场股票分析师/交易员：盘前准备、盘中监控、个股研究、行业轮动、事件催化、风控和盘后复盘。",
+      "zh-TW": "面向二級市場股票分析師/交易員：盤前準備、盤中監控、個股研究、產業輪動、事件催化、風控和盤後復盤。",
+      "ja": "二次市場の株式アナリスト/トレーダー向け。寄前準備、場中監視、銘柄調査、セクターローテーション、材料追跡、リスク管理、引け後レビューを統合。",
+      "ko": "2차 시장 주식 애널리스트/트레이더용. 장전 준비, 장중 모니터링, 종목 리서치, 섹터 로테이션, 이벤트 추적, 리스크 관리, 장마감 리뷰를 통합."
+    }
+  }
+}

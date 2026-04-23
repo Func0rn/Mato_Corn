@@ -1,0 +1,223 @@
+{
+  "offices": [
+    {
+      "id": "office-default",
+      "name": {
+        "en": "One Person Company",
+        "zh-CN": "One Person Company",
+        "zh-TW": "One Person Company",
+        "ja": "One Person Company",
+        "ko": "One Person Company"
+      },
+      "desks": [
+        {
+          "id": "dept-engineering",
+          "name": {
+            "en": "🔧 Engineering",
+            "zh-CN": "🔧 工程",
+            "zh-TW": "🔧 工程",
+            "ja": "🔧 開発",
+            "ko": "🔧 엔지니어링"
+          },
+          "tabs": [
+            {
+              "id": "tab-frontend",
+              "name": {
+                "en": "🎨 Frontend",
+                "zh-CN": "🎨 Frontend",
+                "zh-TW": "🎨 Frontend",
+                "ja": "🎨 Frontend",
+                "ko": "🎨 Frontend"
+              }
+            },
+            {
+              "id": "tab-backend",
+              "name": {
+                "en": "⚙️ Backend",
+                "zh-CN": "⚙️ Backend",
+                "zh-TW": "⚙️ Backend",
+                "ja": "⚙️ Backend",
+                "ko": "⚙️ Backend"
+              }
+            },
+            {
+              "id": "tab-infra",
+              "name": {
+                "en": "☁️ Infrastructure",
+                "zh-CN": "☁️ Infrastructure",
+                "zh-TW": "☁️ Infrastructure",
+                "ja": "☁️ Infrastructure",
+                "ko": "☁️ Infrastructure"
+              }
+            },
+            {
+              "id": "tab-testing",
+              "name": {
+                "en": "🧪 Testing",
+                "zh-CN": "🧪 Testing",
+                "zh-TW": "🧪 Testing",
+                "ja": "🧪 Testing",
+                "ko": "🧪 Testing"
+              }
+            }
+          ],
+          "active_tab": 0
+        },
+        {
+          "id": "dept-product",
+          "name": {
+            "en": "📦 Product",
+            "zh-CN": "📦 产品",
+            "zh-TW": "📦 產品",
+            "ja": "📦 プロダクト",
+            "ko": "📦 프로덕트"
+          },
+          "tabs": [
+            {
+              "id": "tab-design",
+              "name": {
+                "en": "🎨 Design",
+                "zh-CN": "🎨 Design",
+                "zh-TW": "🎨 Design",
+                "ja": "🎨 Design",
+                "ko": "🎨 Design"
+              }
+            },
+            {
+              "id": "tab-docs",
+              "name": {
+                "en": "📚 Documentation",
+                "zh-CN": "📚 Documentation",
+                "zh-TW": "📚 Documentation",
+                "ja": "📚 Documentation",
+                "ko": "📚 Documentation"
+              }
+            },
+            {
+              "id": "tab-research",
+              "name": {
+                "en": "🔍 Research",
+                "zh-CN": "🔍 Research",
+                "zh-TW": "🔍 Research",
+                "ja": "🔍 Research",
+                "ko": "🔍 Research"
+              }
+            }
+          ],
+          "active_tab": 0
+        },
+        {
+          "id": "dept-marketing",
+          "name": {
+            "en": "📢 Marketing",
+            "zh-CN": "📢 营销",
+            "zh-TW": "📢 行銷",
+            "ja": "📢 マーケ",
+            "ko": "📢 마케팅"
+          },
+          "tabs": [
+            {
+              "id": "tab-content",
+              "name": {
+                "en": "✍️ Content",
+                "zh-CN": "✍️ Content",
+                "zh-TW": "✍️ Content",
+                "ja": "✍️ Content",
+                "ko": "✍️ Content"
+              }
+            },
+            {
+              "id": "tab-social",
+              "name": {
+                "en": "📱 Social Media",
+                "zh-CN": "📱 Social Media",
+                "zh-TW": "📱 Social Media",
+                "ja": "📱 Social Media",
+                "ko": "📱 Social Media"
+              }
+            },
+            {
+              "id": "tab-analytics",
+              "name": {
+                "en": "📊 Analytics",
+                "zh-CN": "📊 Analytics",
+                "zh-TW": "📊 Analytics",
+                "ja": "📊 Analytics",
+                "ko": "📊 Analytics"
+              }
+            }
+          ],
+          "active_tab": 0
+        },
+        {
+          "id": "dept-operations",
+          "name": {
+            "en": "⚡ Operations",
+            "zh-CN": "⚡ 运营",
+            "zh-TW": "⚡ 營運",
+            "ja": "⚡ 運用",
+            "ko": "⚡ 운영"
+          },
+          "tabs": [
+            {
+              "id": "tab-support",
+              "name": {
+                "en": "💬 Support",
+                "zh-CN": "💬 Support",
+                "zh-TW": "💬 Support",
+                "ja": "💬 Support",
+                "ko": "💬 Support"
+              }
+            },
+            {
+              "id": "tab-finance",
+              "name": {
+                "en": "💰 Finance",
+                "zh-CN": "💰 Finance",
+                "zh-TW": "💰 Finance",
+                "ja": "💰 Finance",
+                "ko": "💰 Finance"
+              }
+            },
+            {
+              "id": "tab-admin",
+              "name": {
+                "en": "📋 Admin",
+                "zh-CN": "📋 Admin",
+                "zh-TW": "📋 Admin",
+                "ja": "📋 Admin",
+                "ko": "📋 Admin"
+              }
+            }
+          ],
+          "active_tab": 0
+        }
+      ],
+      "active_desk": 0
+    }
+  ],
+  "current_office": 0,
+  "metadata": {
+    "name": {
+      "en": "💼 One-Person Company",
+      "zh-CN": "💼 一人公司",
+      "zh-TW": "💼 一人公司",
+      "ja": "💼 1人会社",
+      "ko": "💼 1인 회사"
+    },
+    "description": {
+      "en": "4 desks, 13 tabs",
+      "zh-CN": "覆盖产品、运营与增长的一人公司布局。",
+      "zh-TW": "涵蓋產品、營運與成長的一人公司佈局。",
+      "ja": "プロダクトから運営まで一人会社向け構成。",
+      "ko": "프로덕트/운영/성장을 한 번에 다루는 1인 회사 구성."
+    },
+    "details": {
+      "en": "Organized by business departments: Engineering, Product, Marketing, and Operations. Perfect for solo entrepreneurs managing multiple business functions.",
+      "zh-CN": "适合一人公司：产品、内容、用户支持、运营与财务协同在同一工作台。",
+      "zh-TW": "適合一人公司：產品、內容、使用者支援、營運與財務協同於同一工作台。",
+      "ja": "1人会社向け。プロダクト、コンテンツ、サポート、運営、財務を一元管理。",
+      "ko": "1인 회사용. 제품/콘텐츠/지원/운영/재무 흐름을 하나의 작업대로 통합."
+    }
+  }
+}

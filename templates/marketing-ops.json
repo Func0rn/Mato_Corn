@@ -1,0 +1,213 @@
+{
+  "offices": [
+    {
+      "id": "office-marketing-ops",
+      "name": {
+        "en": "Marketing Ops",
+        "zh-CN": "Marketing Ops",
+        "zh-TW": "Marketing Ops",
+        "ja": "Marketing Ops",
+        "ko": "Marketing Ops"
+      },
+      "desks": [
+        {
+          "id": "mkt-campaigns",
+          "name": {
+            "en": "🎯 Campaigns",
+            "zh-CN": "🎯 活动管理",
+            "zh-TW": "🎯 活動管理",
+            "ja": "🎯 キャンペーン",
+            "ko": "🎯 캠페인"
+          },
+          "tabs": [
+            {
+              "id": "tab-campaign-planner",
+              "name": {
+                "en": "🧭 Planner",
+                "zh-CN": "🧭 Planner",
+                "zh-TW": "🧭 Planner",
+                "ja": "🧭 Planner",
+                "ko": "🧭 Planner"
+              }
+            },
+            {
+              "id": "tab-copywriting",
+              "name": {
+                "en": "✍️ Copywriting",
+                "zh-CN": "✍️ Copywriting",
+                "zh-TW": "✍️ Copywriting",
+                "ja": "✍️ Copywriting",
+                "ko": "✍️ Copywriting"
+              }
+            },
+            {
+              "id": "tab-creative-qa",
+              "name": {
+                "en": "🖼️ Creative QA",
+                "zh-CN": "🖼️ Creative QA",
+                "zh-TW": "🖼️ Creative QA",
+                "ja": "🖼️ Creative QA",
+                "ko": "🖼️ Creative QA"
+              }
+            }
+          ],
+          "active_tab": 0
+        },
+        {
+          "id": "mkt-social",
+          "name": {
+            "en": "📣 Social Media",
+            "zh-CN": "📣 社交媒体",
+            "zh-TW": "📣 社群媒體",
+            "ja": "📣 SNS運用",
+            "ko": "📣 소셜 미디어"
+          },
+          "tabs": [
+            {
+              "id": "tab-content-calendar",
+              "name": {
+                "en": "🗂️ Content Calendar",
+                "zh-CN": "🗂️ Content Calendar",
+                "zh-TW": "🗂️ Content Calendar",
+                "ja": "🗂️ Content Calendar",
+                "ko": "🗂️ Content Calendar"
+              }
+            },
+            {
+              "id": "tab-scheduling",
+              "name": {
+                "en": "⏱️ Scheduling",
+                "zh-CN": "⏱️ Scheduling",
+                "zh-TW": "⏱️ Scheduling",
+                "ja": "⏱️ Scheduling",
+                "ko": "⏱️ Scheduling"
+              }
+            },
+            {
+              "id": "tab-engagement",
+              "name": {
+                "en": "💬 Engagement",
+                "zh-CN": "💬 Engagement",
+                "zh-TW": "💬 Engagement",
+                "ja": "💬 Engagement",
+                "ko": "💬 Engagement"
+              }
+            }
+          ],
+          "active_tab": 0
+        },
+        {
+          "id": "mkt-growth",
+          "name": {
+            "en": "📈 Growth & SEO",
+            "zh-CN": "📈 增长与SEO",
+            "zh-TW": "📈 成長與SEO",
+            "ja": "📈 成長・SEO",
+            "ko": "📈 그로스·SEO"
+          },
+          "tabs": [
+            {
+              "id": "tab-keywords",
+              "name": {
+                "en": "🔎 Keywords",
+                "zh-CN": "🔎 Keywords",
+                "zh-TW": "🔎 Keywords",
+                "ja": "🔎 Keywords",
+                "ko": "🔎 Keywords"
+              }
+            },
+            {
+              "id": "tab-landing-pages",
+              "name": {
+                "en": "🧱 Landing Pages",
+                "zh-CN": "🧱 Landing Pages",
+                "zh-TW": "🧱 Landing Pages",
+                "ja": "🧱 Landing Pages",
+                "ko": "🧱 Landing Pages"
+              }
+            },
+            {
+              "id": "tab-growth-analytics",
+              "name": {
+                "en": "📊 Analytics",
+                "zh-CN": "📊 Analytics",
+                "zh-TW": "📊 Analytics",
+                "ja": "📊 Analytics",
+                "ko": "📊 Analytics"
+              }
+            }
+          ],
+          "active_tab": 0
+        },
+        {
+          "id": "mkt-crm",
+          "name": {
+            "en": "🤝 CRM & Email",
+            "zh-CN": "🤝 CRM 与邮件",
+            "zh-TW": "🤝 CRM 與郵件",
+            "ja": "🤝 CRM・メール",
+            "ko": "🤝 CRM·이메일"
+          },
+          "tabs": [
+            {
+              "id": "tab-segmentation",
+              "name": {
+                "en": "🧩 Segmentation",
+                "zh-CN": "🧩 Segmentation",
+                "zh-TW": "🧩 Segmentation",
+                "ja": "🧩 Segmentation",
+                "ko": "🧩 Segmentation"
+              }
+            },
+            {
+              "id": "tab-email-flows",
+              "name": {
+                "en": "📨 Email Flows",
+                "zh-CN": "📨 Email Flows",
+                "zh-TW": "📨 Email Flows",
+                "ja": "📨 Email Flows",
+                "ko": "📨 Email Flows"
+              }
+            },
+            {
+              "id": "tab-leads",
+              "name": {
+                "en": "🧲 Leads",
+                "zh-CN": "🧲 Leads",
+                "zh-TW": "🧲 Leads",
+                "ja": "🧲 Leads",
+                "ko": "🧲 Leads"
+              }
+            }
+          ],
+          "active_tab": 0
+        }
+      ],
+      "active_desk": 0
+    }
+  ],
+  "current_office": 0,
+  "metadata": {
+    "name": {
+      "en": "📣 Marketing Ops",
+      "zh-CN": "📣 市场营销专用",
+      "zh-TW": "📣 行銷專用",
+      "ja": "📣 マーケティング業務",
+      "ko": "📣 마케팅 운영"
+    },
+    "description": {
+      "en": "4 desks, 12 tabs",
+      "zh-CN": "4 个 desk，12 个 tab",
+      "zh-TW": "4 個 desk，12 個 tab",
+      "ja": "4 desks, 12 tabs",
+      "ko": "4 desks, 12 tabs"
+    },
+    "details": {
+      "en": "Built for marketing specialists: campaign planning, social operations, growth/SEO, and CRM-email execution in one office.",
+      "zh-CN": "为市场营销人员设计：活动策划、社媒运营、增长SEO、CRM与邮件自动化一体化。",
+      "zh-TW": "為行銷人員設計：活動策劃、社群營運、成長SEO、CRM與郵件自動化一體化。",
+      "ja": "マーケ担当向け。キャンペーン、SNS運用、成長SEO、CRM/メール施策を一体化。",
+      "ko": "마케터 전용. 캠페인/SNS/그로스 SEO/CRM·이메일 실행을 한 오피스에 통합."
+    }
+  }
+}
