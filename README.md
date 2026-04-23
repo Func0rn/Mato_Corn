@@ -89,7 +89,7 @@ Desk 名称输入框支持搜索已有目录：
 
 ### Alarm
 
-![前置脚本功能.gif](https://raw.githubusercontent.com/Func0rn/Tuchuang/main/img/20260423200839371.gif)
+![222.gif](https://raw.githubusercontent.com/Func0rn/Tuchuang/main/img/20260423201828746.gif)
  管理100个codex的你也想知道谁干完活了吧！干完了吱一声继续抽你
 
 ### Terminal Presets
