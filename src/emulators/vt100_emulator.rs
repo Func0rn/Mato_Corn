@@ -40,10 +40,7 @@ impl TerminalEmulator for Vt100Emulator {
             for col in 0..render_cols {
                 let sc = if let Some(cell) = screen.cell(pty_row, col) {
                     let ch = cell.contents().chars().next().unwrap_or(' ');
-                    let previous_wide = cells
-                        .last()
-                        .is_some_and(|prev: &ScreenCell| prev.display_width == 2);
-                    let display_width = if ch == '\0' || previous_wide {
+                    let display_width = if ch == '\0' {
                         0
                     } else {
                         UnicodeWidthChar::width(ch).unwrap_or(1).clamp(1, 2) as u8
@@ -101,8 +98,6 @@ impl TerminalEmulator for Vt100Emulator {
             bell: false,
             focus_events_enabled: false,
             cwd: None,
-            scroll_offset: 0,
-            scrollback_len: 0,
         }
     }
 

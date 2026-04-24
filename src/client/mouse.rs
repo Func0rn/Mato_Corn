@@ -51,15 +51,6 @@ pub fn handle_mouse(app: &mut App, me: crossterm::event::MouseEvent) {
                 let target_row = ty.saturating_sub(1);
                 let target_col = tx.saturating_sub(1).min(terminal_inner.width.saturating_sub(1));
 
-                if screen.scrollback_len > 0 && tx == terminal_inner.width {
-                    if target_row < terminal_inner.height / 2 {
-                        app.pty_scroll(20);
-                    } else {
-                        app.pty_scroll(-20);
-                    }
-                    return;
-                }
-
                 if target_row == screen.cursor.0 {
                     let bytes = cursor_move_sequence(screen.cursor.1, target_col);
                     if !bytes.is_empty() {

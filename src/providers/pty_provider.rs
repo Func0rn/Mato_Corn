@@ -103,11 +103,7 @@ impl PtyProvider {
             }
         }
 
-        if std::path::Path::new("/bin/zsh").exists() {
-            "/bin/zsh".to_string()
-        } else {
-            "/bin/sh".to_string()
-        }
+        "/bin/sh".to_string()
     }
 
     pub fn child_pid(&self) -> Option<u32> {
@@ -338,7 +334,6 @@ impl TerminalProvider for PtyProvider {
     fn write(&mut self, bytes: &[u8]) {
         self.ensure_running();
         if let Some(p) = &mut self.pty {
-            p.emulator.lock().unwrap().scroll(-1_000_000);
             let _ = p.writer.write_all(bytes);
             let _ = p.writer.flush();
         }
@@ -347,11 +342,7 @@ impl TerminalProvider for PtyProvider {
     fn paste(&mut self, text: &str) {
         self.ensure_running();
         let Some(p) = &mut self.pty else { return };
-        let bracketed = {
-            let mut emulator = p.emulator.lock().unwrap();
-            emulator.scroll(-1_000_000);
-            emulator.bracketed_paste_enabled()
-        };
+        let bracketed = p.emulator.lock().unwrap().bracketed_paste_enabled();
         if bracketed {
             let mut payload = Vec::with_capacity(text.len() + 16);
             payload.extend_from_slice(b"\x1b[200~");

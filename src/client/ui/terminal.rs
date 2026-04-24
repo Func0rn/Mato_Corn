@@ -2,11 +2,10 @@ use crate::client::app::{App, Focus};
 use crate::terminal_provider::CursorShape;
 use crate::theme::ThemeColors;
 use ratatui::{
-    buffer::Buffer,
     layout::Rect,
     style::{Modifier, Style},
-    text::Span,
-    widgets::{Block, Borders},
+    text::{Line, Span},
+    widgets::{Block, Borders, Paragraph},
     Frame,
 };
 
@@ -164,41 +163,32 @@ pub(super) fn draw_terminal(f: &mut Frame, app: &mut App, area: Rect, t: &ThemeC
             }
         }
     }
-    draw_scrollbar(
-        buf,
-        Rect {
-            x: ix,
-            y: iy,
-            width: iw,
-            height: ih,
-        },
-        screen.scroll_offset,
-        screen.scrollback_len,
-        t,
-    );
 
     let (cr, cc) = screen.cursor;
     // Hardware cursor is always hidden (terminal.hide_cursor at startup).
     // We use a software cursor overlay rendered in the buffer instead.
     // For Hidden cursor shape (e.g. Claude Code), skip the overlay entirely —
     // the inner TUI app renders its own visual cursor via INVERSE text.
-    if !app.copy_mode
-        && ih > 0
-        && iw > 0
-        && screen_rows > 0
-        && screen.cursor_shape != CursorShape::Hidden
-    {
+    if !app.copy_mode && ih > 0 && iw > 0 && screen.cursor_shape != CursorShape::Hidden {
         let cursor_row = cr.min(screen_rows.saturating_sub(1));
         let cursor_col = cc.min(iw.saturating_sub(1));
+        let visual_cc = screen
+            .lines
+            .get(cursor_row as usize)
+            .map(|line| {
+                line.cells
+                    .iter()
+                    .take(cursor_col as usize)
+                    .map(|cell| usize::from(cell.display_width))
+                    .sum::<usize>() as u16
+            })
+            .unwrap_or(cursor_col);
+        let cursor_x = ix + visual_cc.min(iw.saturating_sub(1));
         let cursor_y = iy + row_base + cursor_row;
 
-        // Software cursor overlay: terminal cursor columns are already visual
-        // display columns. Do not recalculate them from character widths, or
-        // wide CJK cells can push the cursor one column too far to the right.
+        // Software cursor overlay: render a visible caret in the buffer.
         let line = screen.lines.get(cursor_row as usize);
         let mut glyph = " ".to_string();
-        let mut cursor_x = ix + cursor_col;
-        let mut cursor_width = 1u16;
         let mut caret_style = Style::default()
             .bg(term_bg)
             .add_modifier(Modifier::REVERSED);
@@ -209,14 +199,12 @@ pub(super) fn draw_terminal(f: &mut Frame, app: &mut App, area: Rect, t: &ThemeC
             }
             let mut cell = line.cells.get(idx);
             if matches!(cell, Some(c) if c.ch == '\0') && idx > 0 {
-                cursor_x = cursor_x.saturating_sub(1);
                 cell = line.cells.get(idx - 1);
             }
             if let Some(cell) = cell {
                 if cell.ch != '\0' {
                     glyph = cell.ch.to_string();
                 }
-                cursor_width = u16::from(cell.display_width.max(1)).min(2);
                 if let Some(fg) = cell.fg {
                     caret_style = caret_style.fg(fg);
                 }
@@ -235,106 +223,14 @@ pub(super) fn draw_terminal(f: &mut Frame, app: &mut App, area: Rect, t: &ThemeC
                 caret_style = caret_style.add_modifier(Modifier::REVERSED);
             }
         }
-        draw_cursor(buf, cursor_x, cursor_y, cursor_width, &glyph, caret_style, ix + iw);
-    }
-}
-
-fn draw_cursor(
-    buf: &mut Buffer,
-    x: u16,
-    y: u16,
-    width: u16,
-    glyph: &str,
-    style: Style,
-    x_end: u16,
-) {
-    if x >= x_end {
-        return;
-    }
-    if let Some(cell) = buf.cell_mut((x, y)) {
-        cell.set_style(style);
-        cell.set_symbol(glyph);
-    }
-    if width > 1 && x + 1 < x_end {
-        if let Some(cell) = buf.cell_mut((x + 1, y)) {
-            cell.reset();
-            cell.set_style(style);
-        }
-    }
-}
-
-fn draw_scrollbar(
-    buf: &mut Buffer,
-    area: Rect,
-    scroll_offset: u16,
-    scrollback_len: u16,
-    t: &ThemeColors,
-) {
-    if area.width == 0 || area.height < 2 || scrollback_len == 0 {
-        return;
-    }
-
-    let x = area.x + area.width - 1;
-    let track_height = area.height;
-    let visible = u32::from(area.height);
-    let total = visible + u32::from(scrollback_len);
-    let thumb_height = ((visible * visible) / total).max(1).min(visible) as u16;
-    let movable = track_height.saturating_sub(thumb_height);
-    let top_distance = u32::from(scrollback_len.saturating_sub(scroll_offset));
-    let thumb_top = if scrollback_len == 0 {
-        0
-    } else {
-        ((top_distance * u32::from(movable)) / u32::from(scrollback_len)) as u16
-    };
-
-    let track_style = if t.follow_terminal {
-        Style::default().add_modifier(Modifier::DIM)
-    } else {
-        Style::default().fg(t.border()).bg(t.bg())
-    };
-    let thumb_style = if t.follow_terminal {
-        Style::default().add_modifier(Modifier::REVERSED)
-    } else {
-        Style::default().fg(t.accent()).bg(t.bg())
-    };
-
-    for dy in 0..track_height {
-        let in_thumb = dy >= thumb_top && dy < thumb_top + thumb_height;
-        if let Some(cell) = buf.cell_mut((x, area.y + dy)) {
-            cell.set_char(if in_thumb { '█' } else { '│' });
-            cell.set_style(if in_thumb { thumb_style } else { track_style });
-        }
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::draw_cursor;
-    use ratatui::{
-        buffer::Buffer,
-        layout::Rect,
-        style::{Modifier, Style},
-    };
-
-    #[test]
-    fn wide_cursor_marks_leading_and_continuation_cells() {
-        let mut buf = Buffer::empty(Rect::new(0, 0, 4, 1));
-        let style = Style::default().add_modifier(Modifier::REVERSED);
-        draw_cursor(&mut buf, 1, 0, 2, "中", style, 4);
-
-        assert_eq!(buf.cell((1, 0)).unwrap().symbol(), "中");
-        assert_eq!(buf.cell((2, 0)).unwrap().symbol(), " ");
-        assert!(buf
-            .cell((1, 0))
-            .unwrap()
-            .style()
-            .add_modifier
-            .contains(Modifier::REVERSED));
-        assert!(buf
-            .cell((2, 0))
-            .unwrap()
-            .style()
-            .add_modifier
-            .contains(Modifier::REVERSED));
+        f.render_widget(
+            Paragraph::new(Line::from(vec![Span::styled(glyph, caret_style)])),
+            Rect {
+                x: cursor_x,
+                y: cursor_y,
+                width: 1,
+                height: 1,
+            },
+        );
     }
 }

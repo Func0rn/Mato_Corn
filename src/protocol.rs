@@ -5,6 +5,8 @@ use serde::{Deserialize, Serialize};
 pub enum ClientMsg {
     Hello {
         version: String,
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        build_id: Option<String>,
     },
     Spawn {
         tab_id: String,
@@ -65,6 +67,8 @@ pub enum ClientMsg {
 pub enum ServerMsg {
     Welcome {
         version: String,
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        build_id: Option<String>,
     },
     Screen {
         tab_id: String,
@@ -82,10 +86,6 @@ pub enum ServerMsg {
         bell: bool,
         #[serde(default)]
         focus_events_enabled: bool,
-        #[serde(default)]
-        scroll_offset: u16,
-        #[serde(default)]
-        scrollback_len: u16,
     },
     Error {
         message: String,

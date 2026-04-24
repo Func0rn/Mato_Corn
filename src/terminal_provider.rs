@@ -50,12 +50,6 @@ pub struct ScreenContent {
     /// None if the shell has not emitted OSC 7 yet.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub cwd: Option<String>,
-    /// Current scrollback display offset. 0 means the terminal is at the bottom.
-    #[serde(default)]
-    pub scroll_offset: u16,
-    /// Maximum available scrollback offset for the current terminal.
-    #[serde(default)]
-    pub scrollback_len: u16,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
@@ -141,8 +135,6 @@ impl Default for ScreenContent {
             bell: false,
             focus_events_enabled: false,
             cwd: None,
-            scroll_offset: 0,
-            scrollback_len: 0,
         }
     }
 }

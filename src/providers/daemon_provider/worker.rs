@@ -201,8 +201,6 @@ impl DaemonProvider {
                         title,
                         bell,
                         focus_events_enabled,
-                        scroll_offset,
-                        scrollback_len,
                     }) => {
                         screen_gen.fetch_add(1, Ordering::Relaxed);
                         if let Ok(mut c) = cache.lock() {
@@ -219,8 +217,6 @@ impl DaemonProvider {
                                 entry.content.title = title;
                                 entry.content.bell = bell;
                                 entry.content.focus_events_enabled = focus_events_enabled;
-                                entry.content.scroll_offset = scroll_offset;
-                                entry.content.scrollback_len = scrollback_len;
                             }
                         }
                     }

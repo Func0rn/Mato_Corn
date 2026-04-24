@@ -1,4 +1,5 @@
 // Library exports for testing
+pub mod build_info;
 pub mod client;
 pub mod config;
 pub mod daemon;

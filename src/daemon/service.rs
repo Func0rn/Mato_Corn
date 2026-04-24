@@ -1,3 +1,4 @@
+use crate::build_info::current_build_id;
 use crate::config::Config;
 use crate::daemon::signals::SignalHandler;
 use crate::protocol::{ClientMsg, ServerMsg};
@@ -286,6 +287,7 @@ pub async fn handle_client(
         let response = match msg {
             ClientMsg::Hello { .. } => ServerMsg::Welcome {
                 version: CURRENT_VERSION.into(),
+                build_id: Some(current_build_id()),
             },
 
             ClientMsg::Spawn {
@@ -306,6 +308,7 @@ pub async fn handle_client(
                     // Client will send explicit Resize if needed
                     ServerMsg::Welcome {
                         version: "already exists".into(),
+                        build_id: None,
                     }
                 } else {
                     tracing::debug!(
@@ -336,6 +339,7 @@ pub async fn handle_client(
                     }
                     ServerMsg::Welcome {
                         version: "spawned".into(),
+                        build_id: None,
                     }
                 }
             }
@@ -614,14 +618,6 @@ pub async fn handle_client(
                                             }
                                             skip_coalesce = true;
                                         }
-                                        ClientMsg::Scroll { tab_id: ref tid, delta } => {
-                                            if let Some(tab) = tabs.get(tid) {
-                                                let mut tab = tab.lock();
-                                                tab.ensure_running();
-                                                tab.scroll(delta);
-                                            }
-                                            last_sent_screen = None;
-                                        }
                                         _ => {}
                                     }
                                     continue;
@@ -674,9 +670,7 @@ pub async fn handle_client(
                             || content.cursor_shape != prev.cursor_shape
                             || content.title != prev.title
                             || content.bell
-                            || content.focus_events_enabled != prev.focus_events_enabled
-                            || content.scroll_offset != prev.scroll_offset
-                            || content.scrollback_len != prev.scrollback_len;
+                            || content.focus_events_enabled != prev.focus_events_enabled;
 
                         if changed.is_empty() && !meta_changed {
                             // Truly unchanged
@@ -692,8 +686,6 @@ pub async fn handle_client(
                                 title: content.title.clone(),
                                 bell: content.bell,
                                 focus_events_enabled: content.focus_events_enabled,
-                                scroll_offset: content.scroll_offset,
-                                scrollback_len: content.scrollback_len,
                             };
                             rmp_serde::to_vec(&diff).unwrap_or_default()
                         } else {

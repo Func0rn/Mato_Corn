@@ -265,8 +265,6 @@ impl TerminalEmulator for AlacrittyEmulator {
             bell: self.bell.swap(false, Ordering::Relaxed),
             focus_events_enabled: self.term.mode().contains(TermMode::FOCUS_IN_OUT),
             cwd: None,
-            scroll_offset: grid.display_offset().min(u16::MAX as usize) as u16,
-            scrollback_len: grid.history_size().min(u16::MAX as usize) as u16,
         }
     }
 

@@ -34,27 +34,11 @@ pub struct DaemonProvider {
     cached_cwd: Arc<Mutex<Option<String>>>,
     /// Working directory to use when spawning the PTY (inherited from parent tab).
     spawn_cwd: Option<String>,
-    /// Command to inject once immediately after a newly spawned shell is ready enough
-    /// to receive input. Empty/None means plain shell.
+    /// Command(s) to send immediately after spawning a new shell.
     spawn_init_command: Option<String>,
 }
 
 impl DaemonProvider {
-    fn cached_scroll_offset(&self) -> u16 {
-        self.screen_cache
-            .lock()
-            .ok()
-            .and_then(|entry| entry.as_ref().map(|entry| entry.content.scroll_offset))
-            .unwrap_or(0)
-    }
-
-    fn scroll_to_bottom_msg(&self) -> ClientMsg {
-        ClientMsg::Scroll {
-            tab_id: self.tab_id.clone(),
-            delta: -1_000_000,
-        }
-    }
-
     /// Read a response from a stream. Supports binary frames (0x00 prefix) and JSON lines.
     /// Returns Ok(Some(msg)) on data, Ok(None) on timeout, Err on disconnect/error.
     fn read_response(
@@ -313,7 +297,7 @@ impl TerminalProvider for DaemonProvider {
             shell: None,
             env: None,
         });
-        if matches!(resp, Some(ServerMsg::Welcome { ref version }) if version == "spawned") {
+        if matches!(resp, Some(ServerMsg::Welcome { ref version, .. }) if version == "spawned") {
             if let Some(command) = self.spawn_init_command.clone() {
                 let mut bytes = Vec::with_capacity(command.len() + 8);
                 for line in command.lines().map(str::trim).filter(|line| !line.is_empty()) {
@@ -353,15 +337,6 @@ impl TerminalProvider for DaemonProvider {
     }
 
     fn write(&mut self, bytes: &[u8]) {
-        if self.cached_scroll_offset() > 0 {
-            self.send_msg_no_response(self.scroll_to_bottom_msg());
-            self.send_msg_no_response(ClientMsg::Input {
-                tab_id: self.tab_id.clone(),
-                data: bytes.to_vec(),
-            });
-            return;
-        }
-
         let msg = ClientMsg::Input {
             tab_id: self.tab_id.clone(),
             data: bytes.to_vec(),
@@ -374,15 +349,6 @@ impl TerminalProvider for DaemonProvider {
     }
 
     fn paste(&mut self, text: &str) {
-        if self.cached_scroll_offset() > 0 {
-            self.send_msg_no_response(self.scroll_to_bottom_msg());
-            self.send_msg_no_response(ClientMsg::Paste {
-                tab_id: self.tab_id.clone(),
-                data: text.to_string(),
-            });
-            return;
-        }
-
         let msg = ClientMsg::Paste {
             tab_id: self.tab_id.clone(),
             data: text.to_string(),

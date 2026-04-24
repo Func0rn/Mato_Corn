@@ -1,3 +1,4 @@
+mod build_info;
 mod client;
 mod config;
 mod daemon;
@@ -12,6 +13,7 @@ mod terminal_provider;
 mod theme;
 mod utils;
 
+use build_info::current_build_id;
 use error::{MatoError, Result};
 use protocol::{ClientMsg, ServerMsg};
 use std::io::{BufRead, BufReader, Write};
@@ -90,7 +92,11 @@ fn main() -> Result<()> {
     }
 
     if want_version {
-        println!("mato {}", env!("CARGO_PKG_VERSION"));
+        println!(
+            "mato {} (build {})",
+            env!("CARGO_PKG_VERSION"),
+            current_build_id()
+        );
         return Ok(());
     }
 
@@ -141,11 +147,12 @@ fn main() -> Result<()> {
     })
 }
 
-fn daemon_version() -> Option<String> {
+fn daemon_identity() -> Option<(String, Option<String>)> {
     let socket_path = utils::get_socket_path();
     let mut stream = UnixStream::connect(&socket_path).ok()?;
     let hello = ClientMsg::Hello {
         version: env!("CARGO_PKG_VERSION").to_string(),
+        build_id: Some(current_build_id()),
     };
     let json = serde_json::to_vec(&hello).ok()?;
     stream.write_all(&json).ok()?;
@@ -155,15 +162,20 @@ fn daemon_version() -> Option<String> {
     let mut line = String::new();
     BufReader::new(&stream).read_line(&mut line).ok()?;
     match serde_json::from_str::<ServerMsg>(&line).ok()? {
-        ServerMsg::Welcome { version } => Some(version),
+        ServerMsg::Welcome { version, build_id } => Some((version, build_id)),
         _ => None,
     }
 }
 
-fn confirm_daemon_restart(client_version: &str, daemon_version: &str) -> bool {
+fn confirm_daemon_restart(
+    client_version: &str,
+    client_build_id: &str,
+    daemon_version: &str,
+    daemon_build_id: Option<&str>,
+) -> bool {
     eprintln!(
-        "Daemon version mismatch: daemon={}, client={}.",
-        daemon_version, client_version
+        "Daemon build mismatch: daemon={} ({:?}), client={} ({}).",
+        daemon_version, daemon_build_id, client_version, client_build_id
     );
     eprintln!("Restarting daemon will:");
     eprintln!("- terminate all running TTY/shell processes");
@@ -181,27 +193,37 @@ fn confirm_daemon_restart(client_version: &str, daemon_version: &str) -> bool {
 
 fn ensure_daemon_version_compatible() -> Result<()> {
     let client_version = env!("CARGO_PKG_VERSION");
-    let Some(daemon_ver) = daemon_version() else {
+    let client_build_id = current_build_id();
+    let Some((daemon_ver, daemon_build_id)) = daemon_identity() else {
         return Ok(());
     };
 
-    if daemon_ver == client_version {
+    let daemon_matches = daemon_ver == client_version && daemon_build_id.as_deref() == Some(&client_build_id);
+    if daemon_matches {
         return Ok(());
     }
 
-    if confirm_daemon_restart(client_version, &daemon_ver) {
+    if confirm_daemon_restart(
+        client_version,
+        &client_build_id,
+        &daemon_ver,
+        daemon_build_id.as_deref(),
+    ) {
         daemon::kill_all()?;
         daemon::ensure_daemon_running()?;
-        if let Some(v) = daemon_version() {
-            if v != client_version {
+        if let Some((v, b)) = daemon_identity() {
+            if v != client_version || b.as_deref() != Some(&client_build_id) {
                 eprintln!(
-                    "Warning: daemon restarted but version is still {} (expected {}).",
-                    v, client_version
+                    "Warning: daemon restarted but identity is still {} ({:?}) (expected {} ({})).",
+                    v, b, client_version, client_build_id
                 );
             }
         }
     } else {
-        eprintln!("Continuing with existing daemon version {}.", daemon_ver);
+        eprintln!(
+            "Continuing with existing daemon {} ({:?}).",
+            daemon_ver, daemon_build_id
+        );
     }
 
     Ok(())
